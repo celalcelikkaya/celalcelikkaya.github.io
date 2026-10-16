@@ -19,6 +19,6 @@
 | **[Papa Radio](https://www.paparadio.online)** | A radio web app that brings stations together in one place. |
 | **[Bowler Beverage](https://www.bowlerbeverage.com)** | Business website for a Malawi beverage company. |
 
-<p align="center"><img src="night-mode.png" alt="Win Solar in night mode" width="320"></p>
+<p align="center"><img src="win-solar-night.png" alt="Win Solar in night mode" width="320"></p>
 
 <sub>Everything above lives on my [portfolio](https://celalcelikkaya.github.io/).</sub>

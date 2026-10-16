@@ -245,10 +245,15 @@
   .pblock.wal { --a: var(--wal-a); --b: var(--wal-b); }
   .pblock.rad { --a: var(--pr-a); --b: var(--pr-b); }
   .pblock.bow { --a: var(--bow-a); --b: var(--bow-b); }
+  .pblock.solar { --a: #f5b84b; --b: #f5d38a; }
   .gal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
   .gcard { background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
   .gimg { background: #06070b; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); }
   .gimg img { width: 100%; height: 100%; object-fit: contain; }
+  .pblock.solar .gal { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pblock.solar .gimg { aspect-ratio: auto; display: block; background: transparent; }
+  .pblock.solar .gimg img { display: block; width: 100%; height: auto; object-fit: cover; }
+  .pblock.solar .solar-desktop-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gtxt { padding: 20px 22px 24px; }
   .gtxt h4 { font: 700 18px/1.25 var(--f-display); margin: 0 0 8px; letter-spacing: -.005em; }
   .gtxt p { margin: 0; color: var(--muted); font-size: 15px; text-wrap: pretty; }
@@ -278,11 +283,13 @@
     nav.links a { display: none; }
     .hero { padding-block: 56px 36px; }
     .gal { grid-template-columns: 1fr; }
+    .pblock.solar .gal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .pblock { margin-bottom: 64px; }
   }
   @media (max-width: 480px) {
     .wrap { padding-inline: 18px; }
     .sec { padding-block: 40px; }
+    .pblock.solar .gal { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -369,10 +376,7 @@
         <article class="proj solar" style="--a:#f5b84b;--b:#f5d38a">
           <div class="copy">
             <div class="head">
-              <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true" style="flex:none;border:1px solid var(--line);border-radius:12px;padding:9px;background:var(--bg2)">
-                <circle cx="24" cy="24" r="8" fill="none" stroke="#f5b84b" stroke-width="2.5"/>
-                <path d="M24 5v5M24 38v5M5 24h5M38 24h5M10.6 10.6l3.5 3.5m19.8 19.8 3.5 3.5m0-26.8-3.5 3.5m-19.8 19.8-3.5 3.5" stroke="#f5b84b" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
+              <img src="win-solar-icon.png" alt="Win Solar app icon" data-bilingual-en="Win Solar app icon" data-bilingual-tr="Win Solar uygulama simgesi" width="48" height="48">
               <div><small data-bilingual-en="Windows desktop app" data-bilingual-tr="Windows masaüstü uygulaması">Windows desktop app</small><h3>Win Solar</h3></div>
             </div>
             <p data-bilingual-en="Automatically switches Windows between light and dark themes based on local sunrise and sunset." data-bilingual-tr="Windows'un açık ve koyu temasını yerel gün doğumu ve gün batımına göre otomatik değiştirir.">Automatically switches Windows between light and dark themes based on local sunrise and sunset.</p>
@@ -384,29 +388,45 @@
             <p class="meta" data-bilingual-en="No public repository or download link shared yet." data-bilingual-tr="Herkese açık depo veya indirme bağlantısı henüz paylaşılmadı.">No public repository or download link shared yet.</p>
           </div>
           <div class="shot" style="max-width:320px;margin-inline:auto">
-            <img src="night-mode.png" alt="Win Solar in night mode" data-bilingual-en="Win Solar in night mode" data-bilingual-tr="Win Solar gece modunda" loading="lazy">
+            <img src="win-solar-night.png" alt="Win Solar in night mode" data-bilingual-en="Win Solar in night mode" data-bilingual-tr="Win Solar gece modunda" loading="lazy">
           </div>
         </article>
         <div class="gal">
           <article class="gcard">
-            <div class="gimg"><img src="light-mode.png" alt="Win Solar light mode" data-bilingual-en="Win Solar light mode" data-bilingual-tr="Win Solar açık modda" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-light.png" alt="Win Solar light mode" data-bilingual-en="Win Solar light mode" data-bilingual-tr="Win Solar açık modda" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Choose Auto, Light or Dark" data-bilingual-tr="Otomatik, Açık veya Koyu modu seçin">Choose Auto, Light or Dark</h4>
               <p data-bilingual-en="Switch modes manually; Auto follows the sunrise and sunset schedule." data-bilingual-tr="Modları elle seçin; Otomatik modu gün doğumu ve gün batımını izler.">Switch modes manually; Auto follows the sunrise and sunset schedule.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="settings-general.png" alt="Win Solar general settings" data-bilingual-en="Win Solar general settings" data-bilingual-tr="Win Solar genel ayarları" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-settings-general.png" alt="Win Solar general settings" data-bilingual-en="Win Solar general settings" data-bilingual-tr="Win Solar genel ayarları" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Settings for your routine" data-bilingual-tr="Rutininize göre ayarlar">Settings for your routine</h4>
               <p data-bilingual-en="Set language, time format and test the next transition." data-bilingual-tr="Dili ve saat biçimini seçin, sonraki geçişi deneyin.">Set language, time format and test the next transition.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="settings-schedule.png" alt="Win Solar schedule settings" data-bilingual-en="Win Solar schedule settings" data-bilingual-tr="Win Solar zamanlama ayarları" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-settings-timing.png" alt="Win Solar schedule settings" data-bilingual-en="Win Solar schedule settings" data-bilingual-tr="Win Solar zamanlama ayarları" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Fine-tune switch timing" data-bilingual-tr="Geçiş zamanını ayarlayın">Fine-tune switch timing</h4>
               <p data-bilingual-en="Choose switch timing, notifications, startup behavior and manual-mode reset." data-bilingual-tr="Geçiş zamanını, bildirimleri, başlangıç davranışını ve elle modun bitişini ayarlayın.">Choose switch timing, notifications, startup behavior and manual-mode reset.</p>
+            </div>
+          </article>
+        </div>
+        <div class="gal solar-desktop-gallery">
+          <article class="gcard">
+            <div class="gimg"><img src="win-solar-desktop-light.png" alt="Win Solar on the Windows desktop in light mode" data-bilingual-en="Win Solar on the Windows desktop in light mode" data-bilingual-tr="Windows masaüstünde Win Solar açık modda" loading="lazy"></div>
+            <div class="gtxt">
+              <h4 data-bilingual-en="Win Solar on your Windows desktop" data-bilingual-tr="Windows masaüstünüzde Win Solar">Win Solar on your Windows desktop</h4>
+              <p data-bilingual-en="The floating panel shows the current schedule while you work." data-bilingual-tr="Yüzen panel, çalışırken geçerli zamanlamayı gösterir.">The floating panel shows the current schedule while you work.</p>
+            </div>
+          </article>
+          <article class="gcard">
+            <div class="gimg"><img src="win-solar-desktop-dark.png" alt="Win Solar on the Windows desktop in dark mode" data-bilingual-en="Win Solar on the Windows desktop in dark mode" data-bilingual-tr="Windows masaüstünde Win Solar koyu modda" loading="lazy"></div>
+            <div class="gtxt">
+              <h4 data-bilingual-en="A desktop widget, not just a settings panel" data-bilingual-tr="Yalnızca ayar ekranı değil, masaüstü aracı">A desktop widget, not just a settings panel</h4>
+              <p data-bilingual-en="See the dark theme and live sunrise/sunset countdown in place." data-bilingual-tr="Koyu temayı ve gün doğumu/gün batımı geri sayımını masaüstünde görün.">See the dark theme and live sunrise/sunset countdown in place.</p>
             </div>
           </article>
         </div>
