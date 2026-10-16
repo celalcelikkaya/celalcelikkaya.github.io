@@ -434,6 +434,17 @@
     var radioBlock = document.getElementById('rad');
     if (radioBlock) radioBlock.insertAdjacentHTML('beforebegin', projectCard);
 
+    var chips = document.querySelector('.chips');
+    if (chips && !chips.querySelector('a[href="#win-solar"]')) {
+      var winSolarChip = document.createElement('a');
+      winSolarChip.href = '#win-solar';
+      winSolarChip.className = 'chip';
+      winSolarChip.innerHTML = '<img src="win-solar-icon.png" alt="">Win Solar';
+      var radioChip = chips.querySelector('a[href="#rad"]');
+      if (radioChip) chips.insertBefore(winSolarChip, radioChip);
+      else chips.appendChild(winSolarChip);
+    }
+
     function updateBilingualText() {
       var lang = document.documentElement.lang === 'tr' ? 'tr' : 'en';
       document.querySelectorAll('[data-bilingual-en][data-bilingual-tr]').forEach(function (el) {
