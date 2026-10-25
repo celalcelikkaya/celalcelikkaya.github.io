@@ -4,7 +4,6 @@
 
 <br>
 
-**[Portfolio](https://celalcelikkaya.github.io/)**  ·  **[Instagram](https://www.instagram.com/celal_celikkaya_/)**
 
 </div>
 
