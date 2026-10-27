@@ -262,7 +262,39 @@
     }
   }
   .chips.chips-play .chip { animation: chipPulse 1.2s cubic-bezier(.22, .8, .3, 1) backwards; animation-delay: calc(var(--i, 0) * 0.3s); }
-  @media (prefers-reduced-motion: reduce) { .chips.chips-play .chip { animation: none; } }
+  @keyframes chipPulseSoft {
+    0%, 100% {
+      border-color: var(--line); color: var(--muted); background: transparent; transform: none;
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse) 0%, transparent);
+    }
+    45% {
+      transform: translateY(-2px) scale(1.045);
+      border-color: color-mix(in srgb, var(--pulse) 65%, var(--line));
+      color: color-mix(in srgb, var(--fg) 75%, var(--muted));
+      background: color-mix(in srgb, var(--pulse) 7%, transparent);
+      box-shadow: 0 0 16px 0 color-mix(in srgb, var(--pulse) 26%, transparent);
+    }
+  }
+  /* Repeat runs: same grow-and-lift, but slower, with a softer glow. Keep the 0.45s / 2s values in step with CHIP_STAGGER_SOFT in the script. */
+  .chips.chips-play.chips-soft .chip { animation: chipPulseSoft 2s ease-in-out backwards; animation-delay: calc(var(--i, 0) * 0.45s); }
+  @media (prefers-reduced-motion: reduce) { .chips.chips-play .chip, .chips.chips-play.chips-soft .chip { animation: none; } }
+  /* Arrival glow: the project card lights up once, in its own colour, after a pill jumps to it. */
+  @keyframes projArrive {
+    0% {
+      border-color: var(--line);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--a) 0%, transparent), 0 0 0 0 color-mix(in srgb, var(--a) 0%, transparent);
+    }
+    22% {
+      border-color: var(--a);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--a) 55%, transparent), 0 0 44px 6px color-mix(in srgb, var(--a) 32%, transparent);
+    }
+    100% {
+      border-color: var(--line);
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--a) 0%, transparent), 0 0 0 0 color-mix(in srgb, var(--a) 0%, transparent);
+    }
+  }
+  .pblock.arrive > .proj { animation: projArrive 1.7s ease-out; }
+  @media (prefers-reduced-motion: reduce) { .pblock.arrive > .proj { animation: none; } }
   .pblock { scroll-margin-top: 76px; margin-bottom: 84px; }
   .pblock:last-child { margin-bottom: 0; }
   .pblock.dee { --a: var(--dee-a); --b: var(--dee-b); }
@@ -558,17 +590,60 @@
       window.addEventListener('resize', setFootHeight);
     })();
 
-    // Pulse each project pill once, left to right, when the row first becomes visible.
+    // Pulse the project pills left to right when the row scrolls into view.
+    // First run: full pulse. Later runs: slower and softer (.chips-soft). Never restarts mid-run,
+    // and waits at least CHIP_COOLDOWN ms between runs. The 300 / 450 ms staggers match the CSS delays.
     if (chips && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      var chipObserver = new IntersectionObserver(function (entries) {
-        if (!entries.some(function (e) { return e.isIntersecting; })) return;
-        chipObserver.disconnect();
+      var CHIP_STAGGER_FIRST = 300, CHIP_STAGGER_SOFT = 450, CHIP_COOLDOWN = 6000;
+      var chipPlaying = false, chipLastStart = 0, chipFirstRun = true;
+      var playChipPulse = function () {
+        var now = Date.now();
+        if (chipPlaying || now - chipLastStart < CHIP_COOLDOWN) return;
+        chipPlaying = true; chipLastStart = now;
+        var soft = !chipFirstRun;
+        chipFirstRun = false;
         var list = Array.prototype.slice.call(chips.children);
         list.forEach(function (c, i) { c.style.setProperty('--i', i); });
-        setTimeout(function () { chips.classList.add('chips-play'); }, 500);
-        setTimeout(function () { chips.classList.remove('chips-play'); }, 500 + 300 * list.length + 1400);
+        chips.classList.toggle('chips-soft', soft);
+        var lead = soft ? 300 : 500;
+        var total = lead + (soft ? CHIP_STAGGER_SOFT * list.length + 2200 : CHIP_STAGGER_FIRST * list.length + 1400);
+        setTimeout(function () { chips.classList.add('chips-play'); }, lead);
+        setTimeout(function () { chips.classList.remove('chips-play', 'chips-soft'); chipPlaying = false; }, total);
+      };
+      var chipObserver = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) playChipPulse();
       }, { threshold: 0.6 });
       chipObserver.observe(chips);
+    }
+
+    // When a project pill is clicked, glow that project's card once the page has finished scrolling to it.
+    // Arrival = the scroll position has stopped changing; this also works for long jumps and interrupted scrolls.
+    if (chips && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var arriveCancel = null;
+      chips.addEventListener('click', function (e) {
+        var a = e.target.closest ? e.target.closest('a.chip') : null;
+        if (!a) return;
+        var block = document.getElementById((a.getAttribute('href') || '').slice(1));
+        if (!block || !block.classList.contains('pblock')) return;
+        if (arriveCancel) arriveCancel();                       // a newer click replaces a pending glow
+        var cancelled = false, raf = 0, lastY = -1, stableSince = 0, startedAt = Date.now();
+        arriveCancel = function () { cancelled = true; cancelAnimationFrame(raf); };
+        (function watch() {
+          if (cancelled) return;
+          var now = Date.now(), y = window.scrollY;
+          if (y !== lastY) { lastY = y; stableSince = now; }
+          if (now - startedAt > 250 && now - stableSince > 140 && now - startedAt < 8000) {
+            arriveCancel = null;
+            block.classList.remove('arrive'); void block.offsetWidth; block.classList.add('arrive');
+            return;
+          }
+          if (now - startedAt >= 8000) { arriveCancel = null; return; }
+          raf = requestAnimationFrame(watch);
+        })();
+      });
+      document.addEventListener('animationend', function (e) {
+        if (e.animationName === 'projArrive' && e.target.parentNode) e.target.parentNode.classList.remove('arrive');
+      });
     }
 
     function updateBilingualText() {
