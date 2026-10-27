@@ -238,6 +238,31 @@
   .chip { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; font: 600 13.5px var(--f-body); color: var(--muted); padding: 7px 14px 7px 8px; border: 1px solid var(--line); border-radius: 99px; transition: color .15s, border-color .15s; }
   .chip img { width: 22px; height: 22px; border-radius: 6px; }
   .chip:hover { color: var(--fg); border-color: rgba(255,255,255,.28); }
+  .chip { --pulse: #fff; }
+  .chip.dee { --pulse: var(--dee-a); }
+  .chip.ssh { --pulse: var(--ssh-a); }
+  .chip.wal { --pulse: var(--wal-a); }
+  .chip.rad { --pulse: var(--pr-a); }
+  .chip.bow { --pulse: var(--bow-a); }
+  .chip.solar { --pulse: #f5b84b; }
+  .chip.orph { --pulse: #4fa87c; }
+  @keyframes chipPulse {
+    0% {
+      border-color: var(--line); color: var(--muted); background: transparent; transform: none;
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse) 0%, transparent), 0 0 0 0 color-mix(in srgb, var(--pulse) 0%, transparent);
+    }
+    28% {
+      border-color: var(--pulse); color: var(--fg); transform: translateY(-2px) scale(1.045);
+      background: color-mix(in srgb, var(--pulse) 14%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--pulse) 26%, transparent), 0 0 24px 2px color-mix(in srgb, var(--pulse) 50%, transparent);
+    }
+    100% {
+      border-color: var(--line); color: var(--muted); background: transparent; transform: none;
+      box-shadow: 0 0 0 14px color-mix(in srgb, var(--pulse) 0%, transparent), 0 0 0 0 color-mix(in srgb, var(--pulse) 0%, transparent);
+    }
+  }
+  .chips.chips-play .chip { animation: chipPulse 1.2s cubic-bezier(.22, .8, .3, 1) backwards; animation-delay: calc(var(--i, 0) * 0.3s); }
+  @media (prefers-reduced-motion: reduce) { .chips.chips-play .chip { animation: none; } }
   .pblock { scroll-margin-top: 76px; margin-bottom: 84px; }
   .pblock:last-child { margin-bottom: 0; }
   .pblock.dee { --a: var(--dee-a); --b: var(--dee-b); }
@@ -507,7 +532,7 @@
     if (chips && !chips.querySelector('a[href="#win-solar"]')) {
       var winSolarChip = document.createElement('a');
       winSolarChip.href = '#win-solar';
-      winSolarChip.className = 'chip';
+      winSolarChip.className = 'chip solar';
       winSolarChip.innerHTML = '<img src="win-solar-icon.png" alt="">Win Solar';
       var radioChip = chips.querySelector('a[href="#rad"]');
       if (radioChip) chips.insertBefore(winSolarChip, radioChip);
@@ -516,11 +541,24 @@
     if (chips && !chips.querySelector('a[href="#orphanage"]')) {
       var orphanageChip = document.createElement('a');
       orphanageChip.href = '#orphanage';
-      orphanageChip.className = 'chip';
+      orphanageChip.className = 'chip orph';
       orphanageChip.innerHTML = '<img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-icon.png" alt="">Orphanage Manager';
       var radioChip2 = chips.querySelector('a[href="#rad"]');
       if (radioChip2) chips.insertBefore(orphanageChip, radioChip2);
       else chips.appendChild(orphanageChip);
+    }
+
+    // Pulse each project pill once, left to right, when the row first becomes visible.
+    if (chips && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var chipObserver = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (e) { return e.isIntersecting; })) return;
+        chipObserver.disconnect();
+        var list = Array.prototype.slice.call(chips.children);
+        list.forEach(function (c, i) { c.style.setProperty('--i', i); });
+        setTimeout(function () { chips.classList.add('chips-play'); }, 500);
+        setTimeout(function () { chips.classList.remove('chips-play'); }, 500 + 300 * list.length + 1400);
+      }, { threshold: 0.6 });
+      chipObserver.observe(chips);
     }
 
     function updateBilingualText() {
