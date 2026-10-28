@@ -370,6 +370,23 @@
     content: ""; position: absolute; left: 50%; bottom: 10px; width: 14px; height: 2px; margin-left: -7px; border-radius: 2px; opacity: .75;
     background: linear-gradient(90deg, var(--dee-a) 20%, var(--ssh-a) 20% 40%, var(--wal-a) 40% 60%, var(--pr-a) 60% 80%, var(--bow-a) 80%);
   }
+  /* Hero footer: a line-drawn eye that keeps blinking, next to the visitor count. Same white as the text around it. */
+  .ed-foot .r { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
+  .ed-eye { display: flex; align-items: center; justify-content: flex-end; gap: 8px; height: 1.9em; }
+  .ed-eye svg { display: block; width: 22px; height: 13px; flex: none; overflow: visible; }
+  .ed-eye .eye { transform-box: fill-box; transform-origin: center; animation: edBlink 9.4s ease-in-out infinite; }
+  .ed-count { display: inline-block; text-align: right; font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .7s ease; }
+  .ed-eye.ready .ed-count { opacity: 1; }
+  @keyframes edBlink {
+    0%, 38%, 42%, 84%, 88%, 90%, 94%, 100% { transform: scaleY(1); }
+    40%, 86%, 92% { transform: scaleY(.06); }
+  }
+  @media (min-width: 761px) { .ed-eye { gap: 10px; } .ed-eye svg { width: 28px; height: 16px; } }
+  @media (prefers-reduced-motion: reduce) { .ed-eye .eye { animation: none !important; } .ed-count { transition: none; } }
+  .cc-toast { position: fixed; left: 50%; bottom: max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px)); z-index: 70; max-width: min(92vw, 420px);
+    padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(16, 18, 26, .94); color: var(--fg);
+    font: 500 12.5px/1.45 var(--f-mono); text-align: center; letter-spacing: .02em; opacity: 0; transform: translate(-50%, 8px); transition: opacity .4s ease, transform .4s ease; pointer-events: none; }
+  .cc-toast.on { opacity: 1; transform: translate(-50%, 0); }
 </style>
 </head>
 <body>
@@ -398,7 +415,7 @@
     <div class="ed-rule"></div>
     <div class="ed-foot">
       <div class="l"><p data-i18n="ed_l1">Chrome extensions</p><p data-i18n="ed_l2">Web apps and sites</p><p data-i18n="ed_l3">Independent developer</p></div>
-      <div class="r"><p data-i18n="ed_r1">Designed and built</p><p data-i18n="ed_r2">by one developer.</p></div>
+      <div class="r"><div class="ed-eye" id="edVisitors"><span class="ed-count" id="edCount"></span><svg viewBox="0 0 28 16" width="24" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g class="eye"><path vector-effect="non-scaling-stroke" d="M1.5 8C5 3 9.2 1.5 14 1.5S23 3 26.5 8C23 13 18.8 14.5 14 14.5S5 13 1.5 8Z"/><circle vector-effect="non-scaling-stroke" cx="14" cy="8" r="3.6"/><circle cx="14" cy="8" r="1.1" fill="currentColor" stroke="none"/></g></svg><span class="sr-only" data-bilingual-en="visitors" data-bilingual-tr="ziyaretçi">visitors</span></div><div class="txt"><p data-i18n="ed_r1">Designed and built</p><p data-i18n="ed_r2">by one developer.</p></div></div>
     </div>
     <header class="ed-head">
       <a class="ed-brand" href="#home"><i><b></b><b></b><b></b><b></b><b></b></i>Celal</a>
@@ -470,27 +487,27 @@
               <a class="btn" href="https://github.com/celalcelikkaya/win-solar" target="_blank" rel="noopener" data-bilingual-en="View on GitHub" data-bilingual-tr="GitHub'da görüntüle">View on GitHub</a>
             </div>
           </div>
-          <div class="shot" style="max-width:320px;margin-inline:auto">
-            <img src="win-solar-night.png" alt="Win Solar in night mode" data-bilingual-en="Win Solar in night mode" data-bilingual-tr="Win Solar gece modunda" loading="lazy">
+          <div class="shot" style="width:100%;max-width:320px;margin-inline:auto">
+            <img src="win-solar-night.png" width="355" height="629" alt="Win Solar in night mode" data-bilingual-en="Win Solar in night mode" data-bilingual-tr="Win Solar gece modunda" loading="lazy">
           </div>
         </article>
         <div class="gal">
           <article class="gcard">
-            <div class="gimg"><img src="win-solar-light.png" alt="Win Solar light mode" data-bilingual-en="Win Solar light mode" data-bilingual-tr="Win Solar açık modda" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-light.png" width="359" height="649" alt="Win Solar light mode" data-bilingual-en="Win Solar light mode" data-bilingual-tr="Win Solar açık modda" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Choose Auto, Light or Dark" data-bilingual-tr="Otomatik, Açık veya Koyu modu seçin">Choose Auto, Light or Dark</h4>
               <p data-bilingual-en="Switch modes manually; Auto follows the sunrise and sunset schedule." data-bilingual-tr="Modları elle seçin; Otomatik modu gün doğumu ve gün batımını izler.">Switch modes manually; Auto follows the sunrise and sunset schedule.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="win-solar-settings-general.png" alt="Win Solar general settings" data-bilingual-en="Win Solar general settings" data-bilingual-tr="Win Solar genel ayarları" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-settings-general.png" width="385" height="645" alt="Win Solar general settings" data-bilingual-en="Win Solar general settings" data-bilingual-tr="Win Solar genel ayarları" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Settings for your routine" data-bilingual-tr="Rutininize göre ayarlar">Settings for your routine</h4>
               <p data-bilingual-en="Set language, time format and test the next transition." data-bilingual-tr="Dili ve saat biçimini seçin, sonraki geçişi deneyin.">Set language, time format and test the next transition.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="win-solar-settings-timing.png" alt="Win Solar schedule settings" data-bilingual-en="Win Solar schedule settings" data-bilingual-tr="Win Solar zamanlama ayarları" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-settings-timing.png" width="388" height="643" alt="Win Solar schedule settings" data-bilingual-en="Win Solar schedule settings" data-bilingual-tr="Win Solar zamanlama ayarları" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Fine-tune switch timing" data-bilingual-tr="Geçiş zamanını ayarlayın">Fine-tune switch timing</h4>
               <p data-bilingual-en="Choose switch timing, notifications, startup behavior and manual-mode reset." data-bilingual-tr="Geçiş zamanını, bildirimleri, başlangıç davranışını ve elle modun bitişini ayarlayın.">Choose switch timing, notifications, startup behavior and manual-mode reset.</p>
@@ -499,14 +516,14 @@
         </div>
         <div class="gal solar-desktop-gallery">
           <article class="gcard">
-            <div class="gimg"><img src="win-solar-desktop-light.png" alt="Win Solar on the Windows desktop in light mode" data-bilingual-en="Win Solar on the Windows desktop in light mode" data-bilingual-tr="Windows masaüstünde Win Solar açık modda" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-desktop-light.png" width="1438" height="958" alt="Win Solar on the Windows desktop in light mode" data-bilingual-en="Win Solar on the Windows desktop in light mode" data-bilingual-tr="Windows masaüstünde Win Solar açık modda" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Win Solar on your Windows desktop" data-bilingual-tr="Windows masaüstünüzde Win Solar">Win Solar on your Windows desktop</h4>
               <p data-bilingual-en="The floating panel shows the current schedule while you work." data-bilingual-tr="Yüzen panel, çalışırken geçerli zamanlamayı gösterir.">The floating panel shows the current schedule while you work.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="win-solar-desktop-dark.png" alt="Win Solar on the Windows desktop in dark mode" data-bilingual-en="Win Solar on the Windows desktop in dark mode" data-bilingual-tr="Windows masaüstünde Win Solar koyu modda" loading="lazy"></div>
+            <div class="gimg"><img src="win-solar-desktop-dark.png" width="1438" height="958" alt="Win Solar on the Windows desktop in dark mode" data-bilingual-en="Win Solar on the Windows desktop in dark mode" data-bilingual-tr="Windows masaüstünde Win Solar koyu modda" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="A desktop widget, not just a settings panel" data-bilingual-tr="Yalnızca ayar ekranı değil, masaüstü aracı">A desktop widget, not just a settings panel</h4>
               <p data-bilingual-en="See the dark theme and live sunrise/sunset countdown in place." data-bilingual-tr="Koyu temayı ve gün doğumu/gün batımı geri sayımını masaüstünde görün.">See the dark theme and live sunrise/sunset countdown in place.</p>
@@ -538,34 +555,34 @@
               <a class="btn" href="https://github.com/celalcelikkaya/orphanage-manager" target="_blank" rel="noopener" data-bilingual-en="View on GitHub" data-bilingual-tr="GitHub'da görüntüle">View on GitHub</a>
             </div>
           </div>
-          <div class="shot" style="max-width:300px;margin-inline:auto">
-            <img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-home.webp" alt="Orphanage Manager home screen" data-bilingual-en="Orphanage Manager home screen" data-bilingual-tr="Orphanage Manager ana ekranı" loading="lazy">
+          <div class="shot" style="width:100%;max-width:300px;margin-inline:auto">
+            <img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-home.webp" width="780" height="1688" alt="Orphanage Manager home screen" data-bilingual-en="Orphanage Manager home screen" data-bilingual-tr="Orphanage Manager ana ekranı" loading="lazy">
           </div>
         </article>
         <div class="gal">
           <article class="gcard">
-            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-records.webp" alt="Records list with income and expenses" data-bilingual-en="Records list with income and expenses" data-bilingual-tr="Gelir ve giderlerin kayıt listesi" loading="lazy"></div>
+            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-records.webp" width="780" height="1688" alt="Records list with income and expenses" data-bilingual-en="Records list with income and expenses" data-bilingual-tr="Gelir ve giderlerin kayıt listesi" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Income, expenses and in-kind gifts" data-bilingual-tr="Gelir, gider ve ayni bağışlar">Income, expenses and in-kind gifts</h4>
               <p data-bilingual-en="Record each entry by category, with photos for receipts. Edits and cancellations need a reason." data-bilingual-tr="Her kaydı kategoriyle girin, makbuz için fotoğraf ekleyin. Düzenleme ve iptal için gerekçe gerekir.">Record each entry by category, with photos for receipts. Edits and cancellations need a reason.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-funds.webp" alt="Funds screen as seen by a section manager" data-bilingual-en="Funds screen as seen by a section manager" data-bilingual-tr="Bir bölüm yöneticisinin gördüğü Fonlar ekranı" loading="lazy"></div>
+            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-funds.webp" width="780" height="1688" alt="Funds screen as seen by a section manager" data-bilingual-en="Funds screen as seen by a section manager" data-bilingual-tr="Bir bölüm yöneticisinin gördüğü Fonlar ekranı" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Transfers with exchange rates" data-bilingual-tr="Kurlu fon transferleri">Transfers with exchange rates</h4>
               <p data-bilingual-en="The administrator sends a transfer in the donor currency; the section manager confirms receipt and enters the exchange rate, which becomes an income record." data-bilingual-tr="Yönetici bağışçı para biriminde transfer gönderir; bölüm yöneticisi alındığını onaylar ve kuru girer, tutar gelir kaydı olur.">The administrator sends a transfer in the donor currency; the section manager confirms receipt and enters the exchange rate, which becomes an income record.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-changes.webp" alt="Changes screen with a question and an answer" data-bilingual-en="Changes screen with a question and an answer" data-bilingual-tr="Soru ve cevap içeren Değişiklikler ekranı" loading="lazy"></div>
+            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-changes.webp" width="780" height="1688" alt="Changes screen with a question and an answer" data-bilingual-en="Changes screen with a question and an answer" data-bilingual-tr="Soru ve cevap içeren Değişiklikler ekranı" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Every change is traceable" data-bilingual-tr="Her değişiklik izlenebilir">Every change is traceable</h4>
               <p data-bilingual-en="Each edit and cancellation is logged with its reason. The administrator can ask why, and the section manager answers in the same thread." data-bilingual-tr="Her düzenleme ve iptal gerekçesiyle kaydedilir. Yönetici nedenini sorabilir, bölüm yöneticisi cevabını aynı kayıtta verir.">Each edit and cancellation is logged with its reason. The administrator can ask why, and the section manager answers in the same thread.</p>
             </div>
           </article>
           <article class="gcard">
-            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-dark.webp" alt="Home screen in dark mode" data-bilingual-en="Home screen in dark mode" data-bilingual-tr="Ana ekran koyu modda" loading="lazy"></div>
+            <div class="gimg"><img src="https://raw.githubusercontent.com/celalcelikkaya/orphanage-manager/main/orphanage-dark.webp" width="780" height="1688" alt="Home screen in dark mode" data-bilingual-en="Home screen in dark mode" data-bilingual-tr="Ana ekran koyu modda" loading="lazy"></div>
             <div class="gtxt">
               <h4 data-bilingual-en="Made for phones, with dark mode" data-bilingual-tr="Telefonlar için, koyu modlu">Made for phones, with dark mode</h4>
               <p data-bilingual-en="A responsive layout for mobile and desktop that follows the device light or dark setting." data-bilingual-tr="Cihazın açık veya koyu ayarını izleyen, mobil ve masaüstünde çalışan duyarlı arayüz.">A responsive layout for mobile and desktop that follows the device light or dark setting.</p>
@@ -634,28 +651,48 @@
       chipObserver.observe(chips);
     }
 
-    // When a project pill is clicked, glow that project's card once the page has finished scrolling to it.
-    // Arrival = the scroll position has stopped changing; this also works for long jumps and interrupted scrolls.
-    if (chips && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      var arriveCancel = null;
+    // When a project pill is clicked, make sure the page really lands on that project, then glow its card.
+    // "Landed" = the scroll has stopped and the card's top edge sits at its scroll-margin-top. If late-loading
+    // content pushes the card away (iOS Safari has no scroll anchoring), the page is nudged back, and kept honest
+    // for a moment, until the visitor takes over by scrolling.
+    if (chips) {
+      var reduceMotionLand = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var landCancel = null;
+      var landJump = function (top) {
+        var el = document.documentElement, prev = el.style.scrollBehavior;
+        el.style.scrollBehavior = 'auto'; window.scrollTo(0, top); el.style.scrollBehavior = prev;
+      };
       chips.addEventListener('click', function (e) {
         var a = e.target.closest ? e.target.closest('a.chip') : null;
         if (!a) return;
         var block = document.getElementById((a.getAttribute('href') || '').slice(1));
         if (!block || !block.classList.contains('pblock')) return;
-        if (arriveCancel) arriveCancel();                       // a newer click replaces a pending glow
-        var cancelled = false, raf = 0, lastY = -1, stableSince = 0, startedAt = Date.now();
-        arriveCancel = function () { cancelled = true; cancelAnimationFrame(raf); };
+        if (landCancel) landCancel();
+        var cancelled = false, raf = 0, lastY = -1, stableSince = 0, startedAt = Date.now(), fixes = 0, glowed = false, guardUntil = 0;
+        var TAKE = ['wheel', 'touchstart', 'keydown', 'mousedown'];
+        function delta() { return block.getBoundingClientRect().top - (parseFloat(getComputedStyle(block).scrollMarginTop) || 0); }
+        function atEnd() { return window.scrollY >= document.documentElement.scrollHeight - window.innerHeight - 1; }
+        function stop() { cancelled = true; cancelAnimationFrame(raf); TAKE.forEach(function (t) { window.removeEventListener(t, stop, true); }); if (landCancel === stop) landCancel = null; }
+        landCancel = stop;
+        TAKE.forEach(function (t) { window.addEventListener(t, stop, { capture: true, passive: true }); });
         (function watch() {
           if (cancelled) return;
           var now = Date.now(), y = window.scrollY;
           if (y !== lastY) { lastY = y; stableSince = now; }
-          if (now - startedAt > 250 && now - stableSince > 140 && now - startedAt < 8000) {
-            arriveCancel = null;
-            block.classList.remove('arrive'); void block.offsetWidth; block.classList.add('arrive');
-            return;
+          if (!glowed) {
+            if (now - startedAt > 250 && now - stableSince > 140) {            // the scroll has stopped
+              var d = delta();
+              if (Math.abs(d) > 2 && !atEnd() && fixes < 8) { fixes++; landJump(y + d); stableSince = now; }
+              else {
+                glowed = true; guardUntil = now + 2500;
+                if (!reduceMotionLand) { block.classList.remove('arrive'); void block.offsetWidth; block.classList.add('arrive'); }
+              }
+            } else if (now - startedAt > 9000) { stop(); return; }
+          } else {
+            if (now > guardUntil) { stop(); return; }
+            var d2 = delta();
+            if (Math.abs(d2) > 2 && !atEnd()) { landJump(window.scrollY + d2); guardUntil = Math.min(now + 1500, startedAt + 12000); }
           }
-          if (now - startedAt >= 8000) { arriveCancel = null; return; }
           raf = requestAnimationFrame(watch);
         })();
       });
@@ -679,6 +716,71 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       btn.addEventListener('click', function () { window.scrollTo(0, 0); btn.blur(); });
       onScroll();
+    })();
+
+    // Pill colour comes from the project card it points to, so a new project needs no extra colour code.
+    if (chips) {
+      Array.prototype.forEach.call(chips.querySelectorAll('a.chip'), function (chip) {
+        var target = document.getElementById((chip.getAttribute('href') || '').slice(1));
+        var card = target && target.querySelector(':scope > .proj');
+        var colour = card && getComputedStyle(card).getPropertyValue('--a').trim();
+        if (colour) chip.style.setProperty('--pulse', colour);
+      });
+    }
+
+    // Open the site once with ?skipcount=1 to stop counting your own visits in this browser (?skipcount=0 turns it back on).
+    (function () {
+      var q; try { q = new URLSearchParams(location.search).get('skipcount'); } catch (e) { return; }
+      if (q !== '1' && q !== '0') return;
+      var saved = null; try { saved = localStorage.getItem('cc-lang'); } catch (e) {}
+      var tr = (saved || ((navigator.language || '').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en')) === 'tr', msg;   // same rule the site uses to pick its language
+      try {
+        if (q === '1') { localStorage.setItem('skipgc', 't'); msg = tr ? 'Bu tarayıcıdaki ziyaretleriniz artık sayılmayacak.' : 'Your visits from this browser are no longer counted.'; }
+        else { localStorage.removeItem('skipgc'); msg = tr ? 'Bu tarayıcıdaki ziyaretleriniz yeniden sayılacak.' : 'Your visits from this browser are counted again.'; }
+      } catch (e) { msg = tr ? 'Bu tarayıcı ayarı kaydetmeye izin vermiyor.' : 'This browser does not allow saving the setting.'; }
+      try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+      var t = document.createElement('div'); t.className = 'cc-toast'; t.setAttribute('role', 'status'); t.textContent = msg; document.body.appendChild(t);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { t.classList.add('on'); }); });
+      setTimeout(function () { t.classList.remove('on'); setTimeout(function () { t.remove(); }, 600); }, 4200);
+    })();
+
+    // Visitor counter. Counting + the public total come from GoatCounter (free, no cookies, read-only counter).
+    // Put your GoatCounter code here, e.g. 'celalcelikkaya' for celalcelikkaya.goatcounter.com. Empty = the eye just blinks.
+    var GC_CODE = 'celalcelikkayagithubio';
+    (function () {
+      var row = document.getElementById('edVisitors'), num = document.getElementById('edCount');
+      if (!row || !num || !GC_CODE) return;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fmt = new Intl.NumberFormat('en-US');                                     // 1,000 style, in both languages
+      var skipped = false; try { skipped = localStorage.getItem('skipgc') === 't'; } catch (e) {}
+      if (!skipped && location.protocol !== 'file:' && !/^(localhost|127\.|\[::1\])/.test(location.hostname)) {
+        var sc = document.createElement('script');                                  // counts this visit
+        sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+        sc.setAttribute('data-goatcounter', 'https://' + GC_CODE + '.goatcounter.com/count');
+        document.head.appendChild(sc);
+      }
+      function show(n) {
+        var final = fmt.format(n);
+        row.classList.add('ready');
+        if (reduced || n < 2) { num.textContent = final; return; }
+        var t0 = performance.now(), dur = Math.min(1800, 700 + String(n).length * 180);
+        (function step(t) {
+          var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+          num.textContent = fmt.format(Math.round(n * e));
+          if (p < 1) requestAnimationFrame(step);
+        })(t0);
+      }
+      var ctrl = 'AbortController' in window ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 8000);
+      fetch('https://' + GC_CODE + '.goatcounter.com/counter/TOTAL.json', { signal: ctrl ? ctrl.signal : undefined })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (j) {
+          clearTimeout(timer);
+          var n = parseInt(String(j && j.count).replace(/\D/g, ''), 10);
+          if (!isFinite(n) || n < 0) return;
+          setTimeout(function () { show(n); }, Math.max(0, 2100 - performance.now()));   // after the opening animation
+        })
+        .catch(function () {});
     })();
 
     function updateBilingualText() {
