@@ -387,6 +387,7 @@
     padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(16, 18, 26, .94); color: var(--fg);
     font: 500 12.5px/1.45 var(--f-mono); text-align: center; letter-spacing: .02em; opacity: 0; transform: translate(-50%, 8px); transition: opacity .4s ease, transform .4s ease; pointer-events: none; }
   .cc-toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .cc-toast.cc-debug { border-radius: 16px; text-align: left; white-space: pre-line; width: min(92vw, 460px); max-width: none; pointer-events: auto; cursor: pointer; padding: 12px 16px; }
 </style>
 </head>
 <body>
@@ -415,7 +416,7 @@
     <div class="ed-rule"></div>
     <div class="ed-foot">
       <div class="l"><p data-i18n="ed_l1">Chrome extensions</p><p data-i18n="ed_l2">Web apps and sites</p><p data-i18n="ed_l3">Independent developer</p></div>
-      <div class="r"><div class="ed-eye" id="edVisitors"><span class="ed-count" id="edCount"></span><svg viewBox="0 0 28 16" width="24" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g class="eye"><path vector-effect="non-scaling-stroke" d="M1.5 8C5 3 9.2 1.5 14 1.5S23 3 26.5 8C23 13 18.8 14.5 14 14.5S5 13 1.5 8Z"/><circle vector-effect="non-scaling-stroke" cx="14" cy="8" r="3.6"/><circle cx="14" cy="8" r="1.1" fill="currentColor" stroke="none"/></g></svg><span class="sr-only" data-bilingual-en="visitors" data-bilingual-tr="ziyaretçi">visitors</span></div><div class="txt"><p data-i18n="ed_r1">Designed and built</p><p data-i18n="ed_r2">by one developer.</p></div></div>
+      <div class="r"><div class="ed-eye" id="edVisitors"><span class="ed-count" id="edCount"></span><svg viewBox="0 0 28 16" width="24" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g class="eye"><path vector-effect="non-scaling-stroke" d="M1 8Q14 -3 27 8Q14 19 1 8Z"/><circle vector-effect="non-scaling-stroke" cx="14" cy="8" r="4.3"/><circle cx="14" cy="8" r="1.6" fill="currentColor" stroke="none"/></g></svg><span class="sr-only" data-bilingual-en="visitors" data-bilingual-tr="ziyaretçi">visitors</span></div><div class="txt"><p data-i18n="ed_r1">Designed and built</p><p data-i18n="ed_r2">by one developer.</p></div></div>
     </div>
     <header class="ed-head">
       <a class="ed-brand" href="#home"><i><b></b><b></b><b></b><b></b><b></b></i>Celal</a>
@@ -752,13 +753,35 @@
       if (!row || !num || !GC_CODE) return;
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var fmt = new Intl.NumberFormat('en-US');                                     // 1,000 style, in both languages
+
+      // ?counter=debug shows a small panel explaining what the counter is doing (handy on a phone, no console needed).
+      var debug = /[?&]counter=debug(&|$)/.test(location.search), panel = null;
+      var saved = null; try { saved = localStorage.getItem('cc-lang'); } catch (e) {}
+      var tr = (saved || ((navigator.language || '').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en')) === 'tr';
+      function say(en, trText) {
+        if (!debug) return;
+        if (!panel) {
+          panel = document.createElement('div'); panel.className = 'cc-toast cc-debug on'; panel.setAttribute('role', 'status');
+          panel.addEventListener('click', function () { panel.remove(); panel = null; });
+          document.body.appendChild(panel);
+          panel.textContent = (tr ? 'Sayaç tanısı · kod: ' : 'Counter debug · code: ') + GC_CODE + (tr ? ' (kapatmak için dokunun)' : ' (tap to close)');
+        }
+        panel.textContent += '\n' + (tr ? trText : en);
+      }
+
       var skipped = false; try { skipped = localStorage.getItem('skipgc') === 't'; } catch (e) {}
-      if (!skipped && location.protocol !== 'file:' && !/^(localhost|127\.|\[::1\])/.test(location.hostname)) {
+      var local = location.protocol === 'file:' || /^(localhost|127\.|\[::1\])/.test(location.hostname);
+      if (local) say('Preview or localhost: visits are not counted here.', 'Önizleme veya localhost: ziyaretler burada sayılmaz.');
+      else if (skipped) say('This browser is set to skip counting (?skipcount=0 turns it back on).', 'Bu tarayıcı sayımı atlayacak şekilde ayarlı (?skipcount=0 ile geri açılır).');
+      else {
         var sc = document.createElement('script');                                  // counts this visit
         sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
         sc.setAttribute('data-goatcounter', 'https://' + GC_CODE + '.goatcounter.com/count');
+        sc.onload = function () { say('count.js loaded: this visit is being counted.', 'count.js yüklendi: bu ziyaret sayılıyor.'); };
+        sc.onerror = function () { say('count.js was blocked (ad blocker?). Visits from this browser cannot be counted.', 'count.js engellendi (reklam engelleyici?). Bu tarayıcıdaki ziyaretler sayılamaz.'); };
         document.head.appendChild(sc);
       }
+
       function show(n) {
         var final = fmt.format(n);
         row.classList.add('ready');
@@ -773,14 +796,24 @@
       var ctrl = 'AbortController' in window ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 8000);
       fetch('https://' + GC_CODE + '.goatcounter.com/counter/TOTAL.json', { signal: ctrl ? ctrl.signal : undefined })
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-        .then(function (j) {
+        .then(function (r) {
+          if (!r.ok) { var err = new Error('http'); err.status = r.status; throw err; }
+          return r.text();
+        })
+        .then(function (txt) {
           clearTimeout(timer);
-          var n = parseInt(String(j && j.count).replace(/\D/g, ''), 10);
-          if (!isFinite(n) || n < 0) return;
+          var j; try { j = JSON.parse(txt); } catch (e) { j = null; }
+          var n = j ? parseInt(String(j.count).replace(/\D/g, ''), 10) : NaN;
+          if (!isFinite(n) || n < 0) { say('Unexpected counter response: ' + String(txt).slice(0, 80), 'Beklenmeyen sayaç yanıtı: ' + String(txt).slice(0, 80)); return; }
+          say('Counter OK: ' + fmt.format(n) + ' visitors so far.', 'Sayaç çalışıyor: şimdiye kadar ' + fmt.format(n) + ' ziyaretçi.');
           setTimeout(function () { show(n); }, Math.max(0, 2100 - performance.now()));   // after the opening animation
         })
-        .catch(function () {});
+        .catch(function (e) {
+          clearTimeout(timer);
+          if (e && e.status) say('Counter request failed: HTTP ' + e.status + '. In GoatCounter open Settings and turn on "Allow adding visitor counts on your website". (A 404 can also mean no visit has been recorded yet.)',
+                                 'Sayaç isteği başarısız: HTTP ' + e.status + '. GoatCounter\'da Settings bölümünde "Allow adding visitor counts on your website" seçeneğini açın. (404, henüz hiç ziyaret kaydedilmediği anlamına da gelebilir.)');
+          else say('Counter request was blocked or failed (ad blocker, network or CORS).', 'Sayaç isteği engellendi veya başarısız oldu (reklam engelleyici, ağ veya CORS).');
+        });
     })();
 
     function updateBilingualText() {
