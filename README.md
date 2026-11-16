@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="profile-card.svg" alt="Celal Çelikkaya - profile card" width="100%">
+<img src="profile-card.svg" alt="Celal Çelikkaya profile card" width="100%">
 
 <br>
 
