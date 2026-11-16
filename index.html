@@ -828,6 +828,22 @@
       });
     }
 
+    // Opened with a link to a project (e.g. #thinkerbtc): land on it at once instead of a long smooth scroll,
+    // and keep it in place while fonts and images above it finish loading. Any wheel / touch / key hands over.
+    (function () {
+      var id = decodeURIComponent((location.hash || '').slice(1));
+      var block = id && document.getElementById(id);
+      if (!block || !block.classList.contains('pblock')) return;
+      try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+      var el = document.documentElement, stop = false, until = Date.now() + 4000;
+      function off() { return block.getBoundingClientRect().top - (parseFloat(getComputedStyle(block).scrollMarginTop) || 0); }
+      function jump() { var prev = el.style.scrollBehavior; el.style.scrollBehavior = 'auto'; window.scrollTo(0, window.scrollY + off()); el.style.scrollBehavior = prev; }
+      ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) { window.addEventListener(t, function () { stop = true; }, { capture: true, passive: true, once: true }); });
+      jump();
+      (function pin() { if (stop || Date.now() > until) return; if (Math.abs(off()) > 2) jump(); requestAnimationFrame(pin); })();
+      window.addEventListener('load', function () { if (!stop && Date.now() < until + 4000 && Math.abs(off()) > 2) jump(); });
+    })();
+
     // Open the site once with ?skipcount=1 to stop counting your own visits in this browser (?skipcount=0 turns it back on).
     (function () {
       var q; try { q = new URLSearchParams(location.search).get('skipcount'); } catch (e) { return; }
