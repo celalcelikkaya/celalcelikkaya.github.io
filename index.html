@@ -492,7 +492,7 @@
         <article class="proj tbtc" style="--a:#f5b301;--b:#ffd666">
           <div class="copy">
             <div class="head">
-              <img src="thinkerbtc/icon.png" alt="" width="48" height="48">
+              <img src="thinkerbtc/icon.png?v=2" alt="" width="48" height="48">
               <div><small data-bilingual-en="Trading bot · dashboard · investor portal" data-bilingual-tr="İşlem botu · panel · yatırımcı portalı">Trading bot · dashboard · investor portal</small><h3>ThinkerBTC</h3></div>
             </div>
             <p data-bilingual-en="A Binance Futures trading bot that finds, opens and manages trades on its own. Every entry has to pass a three-layer trend handshake, score high enough across about fifteen confirmations (order book, volume delta, open interest, VWAP, divergences, support and resistance) and clear its vetoes; take-profit and stop-loss come from real 1h / 4h structure. Open trades are guarded by an ATR trailing stop and a profit lock that the exchange stop-loss follows, and the bot learns which hours, regimes and symbols work. Comes with a live operator dashboard and an installable investor portal." data-bilingual-tr="İşlemleri kendi bulan, açan ve yöneten bir Binance Futures botu. Her giriş üç katmanlı trend onayından geçmeli, yaklaşık on beş teyitten (emir defteri, hacim farkı, açık pozisyon, VWAP, uyumsuzluklar, destek ve direnç) yeterli puan almalı ve veto filtrelerini aşmalı; kâr al ve zarar durdur gerçek 1s / 4s yapısından gelir. Açık işlemleri ATR trailing stop ve kâr kilidi korur, borsadaki stop-loss kilitlenen kârı takip eder; bot hangi saatlerin, piyasa rejimlerinin ve coinlerin işe yaradığını öğrenir. Canlı operatör paneli ve telefona kurulabilen yatırımcı portalıyla gelir.">A Binance Futures trading bot that finds, opens and manages trades on its own. Every entry has to pass a three-layer trend handshake, score high enough across about fifteen confirmations (order book, volume delta, open interest, VWAP, divergences, support and resistance) and clear its vetoes; take-profit and stop-loss come from real 1h / 4h structure. Open trades are guarded by an ATR trailing stop and a profit lock that the exchange stop-loss follows, and the bot learns which hours, regimes and symbols work. Comes with a live operator dashboard and an installable investor portal.</p>
@@ -506,8 +506,8 @@
             </div>
             <p class="meta" data-bilingual-en="Screenshots and demos show sample data." data-bilingual-tr="Ekran görüntüleri ve demolar örnek veri gösterir.">Screenshots and demos show sample data.</p>
             <div class="btns">
-              <a class="btn solid" href="demo-thinkerbtc-dashboard.html?v=20" data-bilingual-en="Try the operator dashboard" data-bilingual-tr="Operatör panelini dene">Try the operator dashboard</a>
-              <a class="btn" href="demo-thinkerbtc-investor.html?v=20" data-bilingual-en="Try the investor portal" data-bilingual-tr="Yatırımcı portalını dene">Try the investor portal</a>
+              <a class="btn solid" href="demo-thinkerbtc-dashboard.html?v=21" data-bilingual-en="Try the operator dashboard" data-bilingual-tr="Operatör panelini dene">Try the operator dashboard</a>
+              <a class="btn" href="demo-thinkerbtc-investor.html?v=21" data-bilingual-en="Try the investor portal" data-bilingual-tr="Yatırımcı portalını dene">Try the investor portal</a>
               <a class="btn" href="#contact" data-bilingual-en="Ask for access" data-bilingual-tr="Erişim iste">Ask for access</a>
             </div>
           </div>
@@ -709,7 +709,7 @@
       var thinkerChip = document.createElement('a');
       thinkerChip.href = '#thinkerbtc';
       thinkerChip.className = 'chip tbtc';
-      thinkerChip.innerHTML = '<img src="thinkerbtc/icon.png" alt="">ThinkerBTC';
+      thinkerChip.innerHTML = '<img src="thinkerbtc/icon.png?v=2" alt="">ThinkerBTC';
       var radioChip0 = chips.querySelector('a[href="#win-solar"]') || chips.querySelector('a[href="#rad"]');
       if (radioChip0) chips.insertBefore(thinkerChip, radioChip0);
       else chips.appendChild(thinkerChip);
